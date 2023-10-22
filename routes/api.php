@@ -3,6 +3,7 @@
 use App\Models\Track;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,17 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 
-// Track Resource
+// Track Routes
+Route::get('/tracks/{track}/stream', function (Track $track) {
+
+    // Create a bynary stream
+    $response = new BinaryFileResponse(storage_path() . $track->src);
+    BinaryFileResponse::trustXSendfileTypeHeader();
+
+    // Send response
+    return $response;
+});
+
 Route::get('/tracks', function () {
 
     $tracks = Track::with('album', 'album.author')->get();
