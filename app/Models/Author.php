@@ -10,4 +10,14 @@ class Author extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
+
+
+    //*** RELATIONS ***//
+    /**
+     * Album relation
+     */
+    public function albums()
+    {
+        return $this->hasMany(Album::class);
+    }
 }

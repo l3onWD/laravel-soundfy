@@ -10,4 +10,14 @@ class Track extends Model
     use HasFactory;
 
     protected $fillable = ['album_id', 'title', 'src', 'duration'];
+
+
+    //*** RELATIONS ***//
+    /**
+     * Album relation
+     */
+    public function album()
+    {
+        return $this->belongsTo(Album::class);
+    }
 }
