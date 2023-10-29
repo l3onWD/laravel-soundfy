@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('title');
-            $table->string('src');
+            $table->string('file_name');
             $table->integer('duration');
 
             $table->timestamps();

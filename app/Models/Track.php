@@ -9,7 +9,7 @@ class Track extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['album_id', 'title', 'src', 'duration'];
+    protected $fillable = ['album_id', 'title', 'file_name', 'duration'];
 
 
     //*** RELATIONS ***//

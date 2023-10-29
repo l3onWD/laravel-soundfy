@@ -22,7 +22,7 @@ class TrackSeeder extends Seeder
 
             $new_track->album_id = $track['album_id'];
             $new_track->title = $track['title'];
-            $new_track->src = $track['src'];
+            $new_track->file_name = $track['file_name'];
             $new_track->duration = $track['duration'];
 
             $new_track->save();
