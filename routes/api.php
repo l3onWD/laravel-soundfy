@@ -45,6 +45,13 @@ Route::get('/tracks/{track}/stream', function (Track $track) {
     return response($file_content, 200, $headers);
 });
 
+Route::get('/tracks/random', function () {
+
+    $tracks = Track::select('id', 'album_id', 'title', 'duration')->with(['album'])->inRandomOrder()->limit(4)->get();
+
+    return response()->json($tracks);
+});
+
 Route::get('/tracks', function () {
 
     $tracks = Track::with('album', 'album.author')->get();
