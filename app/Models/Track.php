@@ -11,6 +11,8 @@ class Track extends Model
 
     protected $fillable = ['album_id', 'title', 'file_name', 'duration'];
 
+    protected $hidden = ['pivot'];
+
 
     //*** RELATIONS ***//
     /**
