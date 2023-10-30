@@ -20,7 +20,7 @@ class Track extends Model
      */
     public function album()
     {
-        return $this->belongsTo(Album::class)->select('id', 'author_id', 'title', 'release_date')->with('author');
+        return $this->belongsTo(Album::class)->select('id', 'author_id', 'title', 'cover', 'release_date')->with('author');
     }
 
 
