@@ -1,10 +1,9 @@
 <?php
 
+use App\Models\Playlist;
 use App\Models\Track;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,4 +49,12 @@ Route::get('/tracks', function () {
     $tracks = Track::with('album', 'album.author')->get();
 
     return response()->json($tracks);
+});
+
+
+Route::get('/playlists/our-picks', function () {
+
+    $playlists = Playlist::where('user_id', 1)->with(['tracks', 'tracks.album', 'tracks.album.author'])->get();
+
+    return response()->json($playlists);
 });
