@@ -20,4 +20,13 @@ class Track extends Model
     {
         return $this->belongsTo(Album::class);
     }
+
+
+    /**
+     * Playlist relation
+     */
+    public function playlists()
+    {
+        return $this->belongsToMany(Playlist::class);
+    }
 }

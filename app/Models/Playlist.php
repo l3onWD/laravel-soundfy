@@ -10,4 +10,22 @@ class Playlist extends Model
     use HasFactory;
 
     protected $fillable = ['user_id', 'title', 'cover'];
+
+    //*** RELATIONS ***//
+    /**
+     * User relation
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+    /**
+     * Track relation
+     */
+    public function tracks()
+    {
+        return $this->belongsToMany(Track::class);
+    }
 }
