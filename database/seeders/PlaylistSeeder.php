@@ -35,7 +35,7 @@ class PlaylistSeeder extends Seeder
             // Add random tracks
             $playlist_tracks = [];
             foreach ($track_ids as $track_id) {
-                if (rand(0, 1)) $playlist_tracks[] = $track_id;
+                if (rand(0, 2)) $playlist_tracks[] = $track_id;
             }
 
             // Add at least 1 track
