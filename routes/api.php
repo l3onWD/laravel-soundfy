@@ -54,7 +54,7 @@ Route::get('/tracks', function () {
 
 Route::get('/playlists/our-picks', function () {
 
-    $playlists = Playlist::where('user_id', 1)->with(['tracks', 'tracks.album', 'tracks.album.author'])->get();
+    $playlists = Playlist::select('id', 'user_id', 'title', 'cover')->where('user_id', 1)->with(['user', 'tracks'])->get();
 
     return response()->json($playlists);
 });

@@ -17,7 +17,7 @@ class Playlist extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->select('id', 'name');
     }
 
 
@@ -26,6 +26,6 @@ class Playlist extends Model
      */
     public function tracks()
     {
-        return $this->belongsToMany(Track::class);
+        return $this->belongsToMany(Track::class)->select('id', 'album_id', 'title', 'duration')->with('album');
     }
 }
