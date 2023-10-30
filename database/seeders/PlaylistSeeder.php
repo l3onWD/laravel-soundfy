@@ -38,8 +38,9 @@ class PlaylistSeeder extends Seeder
                 if (rand(0, 2)) $playlist_tracks[] = $track_id;
             }
 
-            // Add at least 1 track
-            if (empty($playlist_tracks)) Arr::random($track_ids);
+            if (empty($playlist_tracks)) Arr::random($track_ids); // Add at least 1 track
+
+            shuffle($playlist_tracks); // Shuffle tracks order
 
             $new_playlist->tracks()->attach($playlist_tracks);
         }
