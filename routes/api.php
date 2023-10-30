@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Album;
 use App\Models\Playlist;
 use App\Models\Track;
 use Illuminate\Http\Request;
@@ -52,9 +53,19 @@ Route::get('/tracks', function () {
 });
 
 
+// Playlist routes
 Route::get('/playlists/our-picks', function () {
 
     $playlists = Playlist::select('id', 'user_id', 'title', 'cover')->where('user_id', 1)->with(['user', 'tracks'])->get();
 
     return response()->json($playlists);
+});
+
+
+// Album Routes
+Route::get('/albums/random', function () {
+
+    $albums = Album::select('id', 'author_id', 'title', 'release_date')->with(['author', 'tracks'])->inRandomOrder()->limit(2)->get();
+
+    return response()->json($albums);
 });
