@@ -54,7 +54,7 @@ Route::get('/tracks/random', function () {
 
 Route::get('/tracks', function () {
 
-    $tracks = Track::with('album', 'album.author')->get();
+    $tracks = Track::select('id', 'album_id', 'title', 'duration')->with(['album'])->get();
 
     return response()->json($tracks);
 });
