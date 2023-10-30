@@ -6,12 +6,12 @@ return [
         'cover' => 'https://picsum.photos/id/443/300/300'
     ],
     [
-        'user_id' => 2,
+        'user_id' => 1,
         'title' => 'Knights and Swords',
         'cover' => 'https://picsum.photos/id/83/300/300'
     ],
     [
-        'user_id' => 3,
+        'user_id' => 1,
         'title' => 'Into the wood',
         'cover' => 'https://picsum.photos/id/343/300/300'
     ]

@@ -25,7 +25,7 @@ class PlaylistSeeder extends Seeder
 
             $new_playlist = new Playlist();
 
-            $new_playlist->author_id = $playlist['author_id'];
+            $new_playlist->user_id = $playlist['user_id'];
             $new_playlist->title = $playlist['title'];
             $new_playlist->cover = $playlist['cover'];
 
