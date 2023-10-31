@@ -26,6 +26,6 @@ class Album extends Model
      */
     public function tracks()
     {
-        return $this->hasMany(Track::class)->select('id', 'album_id', 'title', 'duration');
+        return $this->hasMany(Track::class)->select('id', 'album_id', 'title', 'duration')->with('album');
     }
 }

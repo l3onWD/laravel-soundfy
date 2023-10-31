@@ -63,7 +63,11 @@ Route::get('/tracks', function () {
 // Playlist routes
 Route::get('/playlists/our-picks', function () {
 
-    $playlists = Playlist::select('id', 'user_id', 'title', 'cover')->where('user_id', 1)->with(['user', 'tracks'])->get();
+    $playlists = Playlist::select('playlists.id', 'playlists.user_id', 'playlists.title', 'playlists.cover', 'users.name AS author')
+        ->where('user_id', 1)
+        ->join('users', 'users.id', '=', 'playlists.user_id')
+        ->with('tracks')
+        ->get();
 
     return response()->json($playlists);
 });
@@ -72,7 +76,12 @@ Route::get('/playlists/our-picks', function () {
 // Album Routes
 Route::get('/albums/random', function () {
 
-    $albums = Album::select('id', 'author_id', 'title', 'release_date')->with(['author', 'tracks'])->inRandomOrder()->limit(2)->get();
+    $albums = Album::select('albums.id', 'albums.author_id', 'albums.title', 'albums.cover', 'albums.release_date', 'authors.name AS author')
+        ->join('authors', 'authors.id', '=', 'albums.author_id')
+        ->with('tracks')
+        ->inRandomOrder()
+        ->limit(2)
+        ->get();
 
     return response()->json($albums);
 });
