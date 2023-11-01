@@ -24,16 +24,22 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 
 // Playlist routes
-Route::get('/playlists/our-picks', [PlaylistController::class, 'ourPicks']);
-Route::get('/playlists/{playlist}', [PlaylistController::class, 'show']);
+Route::prefix('/playlists')->controller(PlaylistController::class)->group(function () {
+    Route::get('/our-picks', 'ourPicks');
+    Route::get('/{playlist}', 'show');
+});
 
 
 // Album Routes
-Route::get('/albums/random', [AlbumController::class, 'random']);
-Route::get('/albums/{album}', [AlbumController::class, 'show']);
+Route::prefix('/albums')->controller(AlbumController::class)->group(function () {
+    Route::get('/random', 'random');
+    Route::get('/{album}', 'show');
+});
 
 
 // Track Routes
-Route::get('/tracks/{track}/stream', [TrackController::class, 'stream']);
-Route::get('/tracks/random', [TrackController::class, 'random']);
-Route::get('/tracks/{track}', [TrackController::class, 'show']);
+Route::prefix('/tracks')->controller(TrackController::class)->group(function () {
+    Route::get('/{track}/stream', 'stream');
+    Route::get('/random', 'random');
+    Route::get('/{track}', 'show');
+});
