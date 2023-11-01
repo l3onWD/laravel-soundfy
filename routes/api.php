@@ -28,6 +28,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 // Track Routes
 Route::get('/tracks/{track}/stream', [TrackController::class, 'stream']);
 Route::get('/tracks/random', [TrackController::class, 'random']);
+Route::get('/tracks/{track}', [TrackController::class, 'show']);
+
 Route::get('/tracks', function () {
 
     $tracks = Track::select('id', 'album_id', 'title', 'duration')->with(['album'])->get();

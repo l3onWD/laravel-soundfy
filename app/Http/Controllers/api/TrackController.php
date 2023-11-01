@@ -29,7 +29,18 @@ class TrackController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // Get Track media
+        $track = Track::select('tracks.id', 'tracks.album_id', 'tracks.title', 'tracks.duration', 'albums.cover AS cover', 'authors.name AS author')
+            ->join('albums', 'albums.id', '=', 'tracks.album_id')
+            ->join('authors', 'authors.id', '=', 'albums.author_id')
+            ->with(['album'])
+            ->find($id);
+
+        // Send 404 if not found
+        if (!$track) return response(NULL, 404);
+
+        // Send Track
+        return response()->json($track);
     }
 
     /**

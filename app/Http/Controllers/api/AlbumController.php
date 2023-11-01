@@ -29,7 +29,7 @@ class AlbumController extends Controller
      */
     public function show(string $id)
     {
-        // Get Playlist
+        // Get Album media
         $album = Album::select('albums.id', 'albums.author_id', 'albums.title', 'albums.cover', 'albums.release_date', 'authors.name AS author')
             ->join('authors', 'authors.id', '=', 'albums.author_id')
             ->with('tracks')
