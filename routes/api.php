@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\PlaylistController;
 use App\Models\Album;
 use App\Models\Playlist;
 use App\Models\Track;
@@ -68,17 +69,7 @@ Route::get('/tracks', function () {
 
 
 // Playlist routes
-Route::get('/playlists/our-picks', function () {
-
-    // Create playlists media
-    $playlistsMedia = Playlist::select('playlists.id', 'playlists.user_id', 'playlists.title', 'playlists.cover', 'users.name AS author')
-        ->where('user_id', 1)
-        ->join('users', 'users.id', '=', 'playlists.user_id')
-        ->with('tracks')
-        ->get();
-
-    return response()->json($playlistsMedia);
-});
+Route::get('/playlists/our-picks', [PlaylistController::class, 'ourPicks']);
 
 
 // Album Routes
