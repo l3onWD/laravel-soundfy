@@ -27,21 +27,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 // Track Routes
 Route::get('/tracks/{track}/stream', [TrackController::class, 'stream']);
-
-Route::get('/tracks/random', function () {
-
-    // Create tracks media
-    $tracksMedia = Track::select('tracks.id', 'tracks.album_id', 'tracks.title', 'tracks.duration', 'albums.cover AS cover', 'authors.name AS author')
-        ->join('albums', 'albums.id', '=', 'tracks.album_id')
-        ->join('authors', 'authors.id', '=', 'albums.author_id')
-        ->with(['album'])
-        ->inRandomOrder()
-        ->limit(4)
-        ->get();
-
-    return response()->json($tracksMedia);
-});
-
+Route::get('/tracks/random', [TrackController::class, 'random']);
 Route::get('/tracks', function () {
 
     $tracks = Track::select('id', 'album_id', 'title', 'duration')->with(['album'])->get();

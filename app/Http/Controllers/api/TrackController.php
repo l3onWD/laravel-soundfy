@@ -78,4 +78,21 @@ class TrackController extends Controller
 
         return response($file_content, 200, $headers);
     }
+
+    /**
+     * Display Random tracks.
+     */
+    public function random()
+    {
+        // Create tracks media
+        $tracksMedia = Track::select('tracks.id', 'tracks.album_id', 'tracks.title', 'tracks.duration', 'albums.cover AS cover', 'authors.name AS author')
+            ->join('albums', 'albums.id', '=', 'tracks.album_id')
+            ->join('authors', 'authors.id', '=', 'albums.author_id')
+            ->with(['album'])
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
+        return response()->json($tracksMedia);
+    }
 }
