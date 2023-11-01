@@ -76,3 +76,4 @@ Route::get('/playlists/{playlist}', [PlaylistController::class, 'show']);
 
 // Album Routes
 Route::get('/albums/random', [AlbumController::class, 'random']);
+Route::get('/albums/{album}', [AlbumController::class, 'show']);

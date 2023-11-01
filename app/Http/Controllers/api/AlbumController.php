@@ -29,7 +29,17 @@ class AlbumController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // Get Playlist
+        $album = Album::select('albums.id', 'albums.author_id', 'albums.title', 'albums.cover', 'albums.release_date', 'authors.name AS author')
+            ->join('authors', 'authors.id', '=', 'albums.author_id')
+            ->with('tracks')
+            ->find($id);
+
+        // Send 404 if not found
+        if (!$album) return response(NULL, 404);
+
+        // Send Album
+        return response()->json($album);
     }
 
     /**
