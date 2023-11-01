@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\AlbumController;
 use App\Http\Controllers\api\PlaylistController;
 use App\Models\Album;
 use App\Models\Playlist;
@@ -74,15 +75,4 @@ Route::get('/playlists/{playlist}', [PlaylistController::class, 'show']);
 
 
 // Album Routes
-Route::get('/albums/random', function () {
-
-    // Create albums media
-    $albumsMedia = Album::select('albums.id', 'albums.author_id', 'albums.title', 'albums.cover', 'albums.release_date', 'authors.name AS author')
-        ->join('authors', 'authors.id', '=', 'albums.author_id')
-        ->with('tracks')
-        ->inRandomOrder()
-        ->limit(2)
-        ->get();
-
-    return response()->json($albumsMedia);
-});
+Route::get('/albums/random', [AlbumController::class, 'random']);
