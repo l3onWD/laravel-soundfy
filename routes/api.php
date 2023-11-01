@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\AlbumController;
 use App\Http\Controllers\api\PlaylistController;
+use App\Http\Controllers\api\TrackController;
 use App\Models\Album;
 use App\Models\Playlist;
 use App\Models\Track;
@@ -25,27 +26,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 
 // Track Routes
-Route::get('/tracks/{track}/stream', function (Track $track) {
-
-    // Get File Data
-    $file_name = $track->file_name;
-    $file_path = storage_path('tracks/' . $file_name);
-    $file_content = file_get_contents($file_path);
-    $file_size = filesize($file_path);
-
-    // Set mime type
-    $mime_type = "audio/mpeg";
-
-    // Set Headers
-    $headers = [
-        'Accept-Ranges: 0-' . ($file_size - 1),
-        'Content-Length:' . $file_size,
-        'Content-Type:' . $mime_type,
-        'Content-Disposition: inline; filename="' . $file_name . '"'
-    ];
-
-    return response($file_content, 200, $headers);
-});
+Route::get('/tracks/{track}/stream', [TrackController::class, 'stream']);
 
 Route::get('/tracks/random', function () {
 
