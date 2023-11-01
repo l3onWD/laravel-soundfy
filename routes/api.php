@@ -70,6 +70,7 @@ Route::get('/tracks', function () {
 
 // Playlist routes
 Route::get('/playlists/our-picks', [PlaylistController::class, 'ourPicks']);
+Route::get('/playlists/{playlist}', [PlaylistController::class, 'show']);
 
 
 // Album Routes

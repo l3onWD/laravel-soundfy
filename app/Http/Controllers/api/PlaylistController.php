@@ -29,7 +29,17 @@ class PlaylistController extends Controller
      */
     public function show(string $id)
     {
-        //
+
+        // Get Playlist
+        $playlist = Playlist::select('playlists.id', 'playlists.user_id', 'playlists.title', 'playlists.cover', 'users.name AS author')
+            ->join('users', 'users.id', '=', 'playlists.user_id')
+            ->with('tracks')->find($id);
+
+        // Send 404 if not found
+        if (!$playlist) return response(NULL, 404);
+
+        // Send Playlist
+        return response()->json($playlist);
     }
 
     /**
