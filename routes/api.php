@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\AlbumController;
 use App\Http\Controllers\api\PlaylistController;
+use App\Http\Controllers\api\SearchController;
 use App\Http\Controllers\api\TrackController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,3 +44,7 @@ Route::prefix('/tracks')->controller(TrackController::class)->group(function () 
     Route::get('/random', 'random');
     Route::get('/{track}', 'show');
 });
+
+
+// Search Route
+Route::get('/search', [SearchController::class, 'index']);
