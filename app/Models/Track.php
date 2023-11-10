@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +11,7 @@ class Track extends Model
     use HasFactory;
 
     protected $fillable = ['album_id', 'title', 'file_name', 'duration'];
-
+    protected $appends = ['kind'];
     protected $hidden = ['pivot'];
 
 
@@ -30,5 +31,17 @@ class Track extends Model
     public function playlists()
     {
         return $this->belongsToMany(Playlist::class);
+    }
+
+
+    //*** ACCESSORS ***//
+    /**
+     * Set Media type.
+     */
+    protected function kind(): Attribute
+    {
+        return new Attribute(
+            get: fn () => 'track',
+        );
     }
 }
