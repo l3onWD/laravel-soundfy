@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Playlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PlaylistController extends Controller
 {
@@ -33,7 +34,10 @@ class PlaylistController extends Controller
         // Get Playlist
         $playlist = Playlist::select('playlists.id', 'playlists.user_id', 'playlists.title', 'playlists.cover', 'users.name AS author')
             ->join('users', 'users.id', '=', 'playlists.user_id')
-            ->with('tracks')->find($id);
+            ->with(['tracks' => function ($q) {
+                return $q->addSelect(DB::raw('CONCAT("playlist-", playlist_track.playlist_id, "-", tracks.id) AS uid'));
+            }])
+            ->find($id);
 
         // Send 404 if not found
         if (!$playlist) return response(NULL, 404);
@@ -68,7 +72,9 @@ class PlaylistController extends Controller
         $playlistsMedia = Playlist::select('playlists.id', 'playlists.user_id', 'playlists.title', 'playlists.cover', 'users.name AS author')
             ->where('user_id', 1)
             ->join('users', 'users.id', '=', 'playlists.user_id')
-            ->with('tracks')
+            ->with(['tracks' => function ($q) {
+                return $q->addSelect(DB::raw('CONCAT("playlist-", playlist_track.playlist_id, "-", tracks.id) AS uid'));
+            }])
             ->get();
 
         return response()->json($playlistsMedia);

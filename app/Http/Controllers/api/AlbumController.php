@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AlbumController extends Controller
 {
@@ -32,7 +33,9 @@ class AlbumController extends Controller
         // Get Album media
         $album = Album::select('albums.id', 'albums.author_id', 'albums.title', 'albums.cover', 'albums.release_date', 'authors.name AS author')
             ->join('authors', 'authors.id', '=', 'albums.author_id')
-            ->with('tracks')
+            ->with(['tracks' => function ($q) {
+                return $q->addSelect(DB::raw('CONCAT("album-", album_id, "-", tracks.id) AS uid'));
+            }])
             ->find($id);
 
         // Send 404 if not found
@@ -67,7 +70,9 @@ class AlbumController extends Controller
         // Create albums media
         $albumsMedia = Album::select('albums.id', 'albums.author_id', 'albums.title', 'albums.cover', 'albums.release_date', 'authors.name AS author')
             ->join('authors', 'authors.id', '=', 'albums.author_id')
-            ->with('tracks')
+            ->with(['tracks' => function ($q) {
+                return $q->addSelect(DB::raw('CONCAT("album-", album_id, "-", tracks.id) AS uid'));
+            }])
             ->inRandomOrder()
             ->limit(2)
             ->get();
