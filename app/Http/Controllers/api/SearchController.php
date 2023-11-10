@@ -4,9 +4,12 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Album;
+use App\Models\Author;
 use App\Models\Playlist;
 use App\Models\Track;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -22,36 +25,56 @@ class SearchController extends Controller
         if (!isset($request->title) || mb_strlen($request->title) < 2) return [];
 
 
-        // Get all media
+        // Search all media
         $media = [];
 
         // Playlists
-        $playlists = Playlist::select('playlists.id', 'playlists.user_id', 'playlists.title', 'playlists.cover', 'users.name AS author')
-            ->join('users', 'users.id', '=', 'playlists.user_id')
-            ->with('tracks')
+        $playlists = Playlist::addSelect([
+            'id', 'user_id', 'title', 'cover',
+            'author' => User::select('name')
+                ->whereColumn('user_id', 'users.id')
+                ->limit(1)
+        ])->with(['tracks' => function ($q) {
+            return $q->addSelect(DB::raw('CONCAT("playlist-", playlist_track.playlist_id, "-", tracks.id) AS uid'));
+        }])
             ->where('playlists.title', 'like', "%{$request->title}%")
             ->get();
 
-        $media['playlists'] = $playlists;
+        $media = array_merge($media, $playlists->toarray());
+
 
         // Albums
-        $albums = Album::select('albums.id', 'albums.author_id', 'albums.title', 'albums.cover', 'albums.release_date', 'authors.name AS author')
-            ->join('authors', 'authors.id', '=', 'albums.author_id')
-            ->with('tracks')
+        $albums = Album::addSelect([
+            'id', 'author_id', 'title', 'cover', 'release_date',
+            'author' => Author::select('name')
+                ->whereColumn('author_id', 'authors.id')
+                ->limit(1)
+        ])->with(['tracks' => function ($q) {
+            return $q->addSelect(DB::raw('CONCAT("album-", album_id, "-", tracks.id) AS uid'));
+        }])
             ->where('albums.title', 'like', "%{$request->title}%")
             ->get();
 
-        $media['albums'] = $albums;
+        $media = array_merge($media, $albums->toarray());
+
 
         // Tracks
-        $tracks = Track::select('tracks.id', 'tracks.album_id', 'tracks.title', 'tracks.duration', 'albums.cover AS cover', 'authors.name AS author')
-            ->join('albums', 'albums.id', '=', 'tracks.album_id')
-            ->join('authors', 'authors.id', '=', 'albums.author_id')
-            ->with(['album'])
+        $tracks = Track::addSelect([
+            'id', 'album_id', 'title', 'duration',
+            'cover' => Album::select('cover')
+                ->whereColumn('album_id', 'albums.id')
+                ->limit(1),
+            'author_id' => Album::select('author_id')
+                ->whereColumn('album_id', 'albums.id')
+                ->limit(1),
+            'author' => Author::select('name')
+                ->whereColumn('author_id', 'authors.id')
+                ->limit(1)
+        ])->with(['album'])
             ->where('tracks.title', 'like', "%{$request->title}%")
             ->get();
 
-        $media['tracks'] = $tracks;
+        $media = array_merge($media, $tracks->toarray());
 
 
         return $media;
